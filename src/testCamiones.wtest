@@ -1,0 +1,34 @@
+import camion.*
+import cosas.*
+
+test "El camion carga, descarga y se pesa" {
+    camion.cargar(knightRider)
+    camion.cargar(knightRider)
+    camion.cargar(knightRider)
+    camion.descargar(knightRider)
+	assert.that(camion.pesoTotal() == 2000)
+}
+
+test "El camion se excede de peso"{
+	camion.cargar(knightRider)
+	camion.cargar(knightRider)
+	camion.cargar(bumblebee)
+	assert.that(camion.excedidoDePeso())
+}
+
+test "Devuelve Bumblebee ya que supera el limite de peligrosidad 11"{
+	camion.cargar(knightRider)
+	camion.cargar(bumblebee)
+	assert.that(camion.objetosPeligrosos(11).contains(bumblebee) && not camion.objetosPeligrosos(11).contains(knightRider))
+}
+
+test "Devuelve Bumblebee ya que supera la peligrosidad del KnightRider"{
+	camion.cargar(knightRider)
+	camion.cargar(bumblebee)
+	assert.that(camion.objetosMasPeligrososQue(knightRider).contains(bumblebee))
+}
+
+test "El camion puede circular en la ruta ya que no supera el maximo de peligrosidad"{
+	camion.cargar(bumblebee)
+	assert.that(camion.puedeCircularEnRuta(15))
+}

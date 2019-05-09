@@ -18,6 +18,6 @@ object camion {
 		return cosas.filter{ cosaL => cosaL.nivelPeligrosidad() > cosa.nivelPeligrosidad()}
 	}
 	method puedeCircularEnRuta(nivelMaximoPeligrosidad) {
-	    return (cosas.filter({cosa=> cosa.nivelPeligrosidad() > nivelMaximoPeligrosidad })).isEmpty()
+	    return (cosas.filter({cosa => cosa.nivelPeligrosidad() > nivelMaximoPeligrosidad })).isEmpty()
 	}
 }
