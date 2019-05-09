@@ -32,3 +32,27 @@ test "El camion puede circular en la ruta ya que no supera el maximo de peligros
 	camion.cargar(bumblebee)
 	assert.that(camion.puedeCircularEnRuta(15))
 }
+
+test "Test de Lladrillos y Arena a Granel"{
+	camion.cargar(paqueteDeLadrillos)
+	paqueteDeLadrillos.cantidad(10)
+	camion.cargar(arenaAGranel)
+	arenaAGranel.peso(80)
+	assert.that(camion.pesoTotal() == 1100 && camion.cosas().sum({cosa => cosa.nivelPeligrosidad()}) == 3 )
+}
+
+test "Test de Bateria Antiaerea y Contenedor Portuario"{
+	camion.cargar(bateriaAntiaerea)
+	bateriaAntiaerea.estaConLosMisiles(false)
+    camion.cargar(contenedorPortuario)
+    contenedorPortuario.cargar(knightRider)
+	assert.that(camion.pesoTotal() == 1800 && camion.cosas().sum({cosa => cosa.nivelPeligrosidad()}) == 10 )
+}
+
+test "test de Residuos Radioactivos y Embalaje De Seguridad con Knight Rider"{
+	camion.cargar(residuosRadioactivos)
+	residuosRadioactivos.peso(200)
+	camion.cargar(embalajeDeSeguridad)
+	embalajeDeSeguridad.recubre(knightRider)
+	assert.that(camion.pesoTotal() == 1700 && camion.cosas().sum({cosa => cosa.nivelPeligrosidad()}) == 205 )
+}
