@@ -30,20 +30,20 @@ test "Devuelve Bumblebee ya que supera la peligrosidad del KnightRider"{
 
 test "El camion puede circular en la ruta ya que no supera el maximo de peligrosidad"{
 	camion.cargar(bumblebee)
-	assert.that(camion.puedeCircularEnRuta(15))
+	assert.that(camion.puedeCircularEnRuta(30))
 }
 
 test "Test de Lladrillos y Arena a Granel"{
 	camion.cargar(paqueteDeLadrillos)
-	paqueteDeLadrillos.cantidad(10)
+	paqueteDeLadrillos.sumarCantidad(8)
 	camion.cargar(arenaAGranel)
-	arenaAGranel.peso(80)
+	arenaAGranel.sumarPeso(40)
 	assert.that(camion.pesoTotal() == 1100 && camion.cosas().sum({cosa => cosa.nivelPeligrosidad()}) == 3 )
 }
 
 test "Test de Bateria Antiaerea y Contenedor Portuario"{
 	camion.cargar(bateriaAntiaerea)
-	bateriaAntiaerea.estaConLosMisiles(false)
+	bateriaAntiaerea.desarmar()
     camion.cargar(contenedorPortuario)
     contenedorPortuario.cargar(knightRider)
 	assert.that(camion.pesoTotal() == 1800 && camion.cosas().sum({cosa => cosa.nivelPeligrosidad()}) == 10 )
@@ -51,8 +51,35 @@ test "Test de Bateria Antiaerea y Contenedor Portuario"{
 
 test "test de Residuos Radioactivos y Embalaje De Seguridad con Knight Rider"{
 	camion.cargar(residuosRadioactivos)
-	residuosRadioactivos.peso(200)
+	residuosRadioactivos.sumarPeso(180)
 	camion.cargar(embalajeDeSeguridad)
 	embalajeDeSeguridad.recubre(knightRider)
 	assert.that(camion.pesoTotal() == 1700 && camion.cosas().sum({cosa => cosa.nivelPeligrosidad()}) == 205 )
+}
+
+test "El camion tiene algo que pesa entre 2 valores"{
+	camion.cargar(knightRider)
+	camion.cargar(bumblebee)
+	assert.that(camion.tieneAlgoQuePesaEntre(500, 800))
+}
+
+test "La cosa mas pesada del camion"{
+	camion.cargar(bumblebee)
+	camion.cargar(residuosRadioactivos)
+	residuosRadioactivos.sumarPeso(850)
+	assert.that(camion.cosaMasPesada() == residuosRadioactivos)
+}
+
+test "Total de bultos del camion"{
+	camion.cargar(paqueteDeLadrillos)
+	paqueteDeLadrillos.sumarCantidad(101)
+	camion.cargar(contenedorPortuario)
+	contenedorPortuario.cargar(bumblebee)
+	assert.that(camion.totalBultos() == 5)
+}
+
+test "Los pesos de cada cosa del camion en una lista"{
+	camion.cargar(knightRider)
+	camion.cargar(bumblebee)
+	assert.that(camion.pesos() == [500, 800] )
 }
