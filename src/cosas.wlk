@@ -3,6 +3,7 @@ object knightRider {
 	
 	method peso() { return 500 }
 	method nivelPeligrosidad() { return 10 }
+	method esCargada(){  }
 }
 
 object bumblebee {
@@ -12,6 +13,7 @@ object bumblebee {
 	method peso() { return 800 }
 	method nivelPeligrosidad() { return if (transformadoEnAuto) { 15 } else { 30 }  }
 	method transformar() { transformadoEnAuto = not transformadoEnAuto }
+	method esCargada(){ transformadoEnAuto = false }
 }
 
 object paqueteDeLadrillos{
@@ -24,6 +26,7 @@ object paqueteDeLadrillos{
 	}
 	method peso() { return cantidad * 2 }
 	method nivelPeligrosidad() { return 2 }
+	method esCargada(){ self.sumarCantidad(12) }
 }
 
 object arenaAGranel{
@@ -33,6 +36,7 @@ object arenaAGranel{
 	method peso() { return peso }
 	method sumarPeso(int) { peso += int }
 	method nivelPeligrosidad(){ return 1 }
+	method esCargada(){ self.sumarPeso(20) }
 }
 
 object bateriaAntiaerea{
@@ -44,17 +48,14 @@ object bateriaAntiaerea{
 	method bulto(){ return if(estaConLosMisiles){ 2 } else { 1 }}
 	method peso() { return if(estaConLosMisiles) { 300 } else { 200 } }
 	method nivelPeligrosidad(){ return if(estaConLosMisiles) { 100 } else { 0 } }
+	method esCargada(){ self.armar() }
 }
 
 object contenedorPortuario{
     const property cosas = []
     
     method reaccionarCosas(){ 	
-    	if(cosas.contains(bumblebee)){ bumblebee.transformar() }
-		if(cosas.contains(paqueteDeLadrillos)){ paqueteDeLadrillos.sumarCantidad(12) }
-		if(cosas.contains(arenaAGranel)){ arenaAGranel.sumarPeso(20) }
-		if(cosas.contains(residuosRadioactivos)){ residuosRadioactivos.sumarPeso(20) }
-		if(cosas.contains(bateriaAntiaerea)){ bateriaAntiaerea.armar() } 
+    	cosas.all{ cosa=> cosa.esCargada() } 
 	}
     method bulto(){ return cosas.sum({cosa => cosa.bulto()}) + 1 }
 	method peso() = cosas.sum({cosa => cosa.peso()}) + 100
@@ -66,6 +67,7 @@ object contenedorPortuario{
 		cosas.remove(cosa)
 	}
 	method nivelPeligrosidad(){ return if(cosas.isEmpty()) { 0 } else { cosas.max({cosa => cosa.nivelPeligrosidad()}).nivelPeligrosidad() } }
+	method esCargada(){ self.reaccionarCosas() }
 }
 
 object residuosRadioactivos{
@@ -75,6 +77,7 @@ object residuosRadioactivos{
 	method peso(){ return peso }
 	method sumarPeso(int){ peso += int }
 	method nivelPeligrosidad() { return 200 }
+	method esCargada(){ self.sumarPeso(20) }
 }
 
 object embalajeDeSeguridad{
@@ -83,4 +86,5 @@ object embalajeDeSeguridad{
 	
 	method peso(){ return recubre.peso() }
 	method nivelPeligrosidad(){ return recubre.nivelPeligrosidad() / 2 }
+	method esCargada(){  }
 }

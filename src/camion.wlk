@@ -6,12 +6,7 @@ object camion {
 	method pesoTotal() = cosas.sum({cosa => cosa.peso()}) + 1000
 	method cargar(unaCosa) {
 		cosas.add(unaCosa)
-		if(unaCosa == bumblebee){ bumblebee.transformar() }
-		if(unaCosa == paqueteDeLadrillos){ paqueteDeLadrillos.sumarCantidad(12) }
-		if(unaCosa == arenaAGranel){ arenaAGranel.sumarPeso(20) }
-		if(unaCosa == residuosRadioactivos){ residuosRadioactivos.sumarPeso(20) }
-		if(unaCosa == bateriaAntiaerea){ bateriaAntiaerea.armar() }
-		if(unaCosa == contenedorPortuario){ contenedorPortuario.reaccionarCosas() }
+		unaCosa.esCargada()
 	}
 	method descargar(cosa) {
 		cosas.remove(cosa)
@@ -21,13 +16,14 @@ object camion {
 		return cosas.filter{ cosa => cosa.nivelPeligrosidad() > nivel}
 	}
 	method objetosMasPeligrososQue(cosa){
-		return cosas.filter{ cosaL => cosaL.nivelPeligrosidad() > cosa.nivelPeligrosidad()}
-	}
+		return self.objetosPeligrosos(cosa.nivelPeligrosidad() )
+	  }  
+	
 	method puedeCircularEnRuta(nivelMaximoPeligrosidad) {
-	    return (cosas.filter({cosa => cosa.nivelPeligrosidad() > nivelMaximoPeligrosidad })).isEmpty()
+	    return cosas.all({cosa => cosa.nivelPeligrosidad() <= nivelMaximoPeligrosidad })
 	}
 	method tieneAlgoQuePesaEntre(min, max){
-		return 	not (cosas.filter{ cosa => cosa.peso().between(min, max)}).isEmpty()
+		return 	cosas.any{ cosa => cosa.peso().between(min, max)}
 	}
 	method cosaMasPesada(){
 		return cosas.max({cosa => cosa.peso()})
